@@ -1,0 +1,61 @@
+version: "3.8"
+services:
+  db:
+    image: postgres
+    ports:
+      - "4306:3306"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    restart: always
+    env_file:
+      - ./.env
+    # environment:
+    #   POSTGRES_USER: baukis2_db
+    #   POSTGRES_PASSWORD: baukis2_db
+    #   POSTGRES_DB: baukis2_db
+    #   BAUKIS2_MYAPP_DATABASE_PASSWORD: baukis2_db
+  backend:
+    build:
+      context: ./baukis2_backend/
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./baukis2_backend:/baukis2_myapp
+      - bundle:/usr/local/bundle
+    # command: >
+    #   bash -c "rm -rf tmp/pids/server.pid &&
+    #   export NODE_OPTIONS=--openssl-legacy-provider &&
+    #   bundle exec rails assets:precompile &&
+    #   export NODE_OPTIONS=--openssl-legacy-provider RAILS_ENV=production &&
+    #   bundle exec rails assets:precompile RAILS_ENV=production &&
+    #   bundle exec rails s -p 3000 -b '0.0.0.0' -e production"
+    command: >
+      bash -c "rm -rf tmp/pids/server.pid &&
+      export NODE_OPTIONS=--openssl-legacy-provider &&
+      bundle exec rails assets:precompile &&
+      bundle exec rails s -p 3000 -b '0.0.0.0'"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - db
+  https-portal:
+    image: steveltn/https-portal:1
+    ports:
+      - '80:80'
+      - '443:443'
+    links:
+      - backend
+    restart: always
+    environment:
+      DOMAINS: 'example.com -> http://backend:3000, baukis2.example.com -> http://backend:3000'
+      STAGE: 'local'
+    volumes:
+      - ./https-portal:/var/lib/https-portal
+volumes:
+  pg_data:
+    driver: local
+  bundle:
+    driver: local
+  https-portal:
+    driver: local

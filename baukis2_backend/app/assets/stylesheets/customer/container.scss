@@ -1,0 +1,18 @@
+@import 'customer/color';
+@import 'customer/dimensions';
+
+
+div#container {
+     div#wrapper {
+       h1 {
+         margin: 0;
+         // padding: 9px 6px;
+         padding: $moderate * 1.5 $moderate;
+         // font-size: 16px;
+         font-size: $large;
+         font-weight: normal;
+         background-color: $very_dark_yellow;
+         color: $light_gray;
+       }
+     }
+   }

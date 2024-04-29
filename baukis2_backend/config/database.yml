@@ -1,0 +1,27 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  timeout: 5000
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  host: db
+  username: baukis2_db
+  password: baukis2_db
+#
+development:
+  <<: *default
+  database: baukis2_db
+
+test:
+  <<: *default
+  database: baukis2_db_test
+
+production:
+  <<: *default
+  database: baukis2_db_production
+  username: baukis2_db
+  # usernameは、default側と同一にすること。
+  # うっかり別名で作ってエラーを吐いたらdefault川のものに変更する。
+  # 「とりあえず」なら右のコマンドだ。　→　*rails db*
+  # パスワードを聞かれる際、このプロジェクトで使用しているDB名がわかるので、
+  # それに合わせるといいだろう。(…バタッーーーーー)
+  password: <%= ENV['BAUKIS2_BACKEND_DATABASE_PASSWORD'] %>
