@@ -10,8 +10,33 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 0) do
+ActiveRecord::Schema[7.0].define(version: 2024_04_29_055604) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "administrators", force: :cascade do |t|
+    t.string "email", null: false
+    t.string "hashed_password"
+    t.boolean "suspended", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index "lower((email)::text)", name: "index_administrators_on_LOWER_email", unique: true
+  end
+
+  create_table "staff_members", force: :cascade do |t|
+    t.string "email", null: false
+    t.string "family_name", null: false
+    t.string "given_name", null: false
+    t.string "family_name_kana", null: false
+    t.string "given_name_kana", null: false
+    t.string "hashed_password"
+    t.date "start_date", null: false
+    t.date "end_date"
+    t.boolean "suspended", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index "lower((email)::text)", name: "index_staff_members_on_LOWER_email", unique: true
+    t.index ["family_name_kana", "given_name_kana"], name: "index_staff_members_on_family_name_kana_and_given_name_kana"
+  end
 
 end
