@@ -19,7 +19,7 @@ class CreateStaffMembers < ActiveRecord::Migration[7.0]
     # "lower"関数は簡単に言えば重複メールアドレス登録防止のため。
     # あとはわからない。pending(保留)。
     add_index :staff_members, "LOWER(email)", unique: true
-    
+
     # 下のコードは、おそらく「staff_member」でソートをかける時、
     # フリガナで検索すると連動してくれる、ということなのだろう。
     add_index :staff_members, [ :family_name_kana, :given_name_kana ]

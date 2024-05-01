@@ -33,8 +33,6 @@ require 'rails_helper'
       )
     end
 
-
-
     example "ホスト名が対象外ならroutableではない" do
       expect(get: "http://foo.example.jp").not_to be_routable
     end
