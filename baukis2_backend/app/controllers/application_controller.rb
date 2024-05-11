@@ -16,7 +16,9 @@ class ApplicationController < ActionController::Base
   # rescue_from ActiveRecord::RecordNotFound, with: :rescue404
   #
   # ↑ concerns/error_handlers.rbへ移転しました
+
   include ErrorHandlers if Rails.env.production?
+  # include ErrorHandlers
   # ↑上のコードを使用することで、concernで使用しているファイルのmodule要素が使えるようになるぞ。
   # オリジナルのエラー画面がでたほうが開発を進めやすいため、productionに限定している。
 

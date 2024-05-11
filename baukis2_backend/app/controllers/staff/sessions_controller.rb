@@ -1,4 +1,8 @@
 class Staff::SessionsController < Staff::Base
+
+  skip_before_action :authorize
+  # base.rbでbefore_actionとして定義した処理を適用させたくない場合はこの処理を。
+
   def new
     if current_staff_member
       redirect_to :staff_root
@@ -11,7 +15,8 @@ class Staff::SessionsController < Staff::Base
   end
 
   def create
-    @form = Staff::LoginForm.new(params[:staff_login_form])
+    @form = Staff::LoginForm.new(login_form_params)
+    # @form = Staff::LoginForm.new(params[:staff_login_form])
     if @form.email.present?
       staff_member =
         StaffMember.find_by("LOWER(email) = ?", @form.email.downcase)
@@ -29,10 +34,12 @@ class Staff::SessionsController < Staff::Base
         render action: "new"
       else
         session[:staff_member_id] = staff_member.id
+        session[:last_access_time] = Time.current
+        # ↑ログイン時の時刻を記録。
         flash.notice = "ログイン成功: ようこそ"
         redirect_to :staff_root
       end
-      
+
     else
       flash.alert = "ログイン失敗:メールアドレス/パスワードをご確認ください。"
       render action: "new"
@@ -43,6 +50,12 @@ class Staff::SessionsController < Staff::Base
     session.delete(:staff_member_id)
     flash.notice = "ログアウト: またのご利用をお待ちしております"
     redirect_to :staff_root
+  end
+
+  private
+
+  def login_form_params
+    params.require(:staff_login_form).permit(:email, :password)
   end
 
 
