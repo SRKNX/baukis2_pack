@@ -30,12 +30,22 @@ class Staff::SessionsController < Staff::Base
     # 自分で設定を作るので自由な編集が可能だ。多分。
 
       if staff_member.suspended?
+        staff_member.events.create!(type: "rejected");
+        # ↑ モデル(staff_events)に、「self.inheritance_column = nil」を加えて
+        # belongs_to :member, class_name: "StaffMember"で
+        # 関係を持たせたことでコントローラー上で直接値を入れることができる。
+        # 「staff_events」ではなく「events」となっているのも、class_name設定で
+        # 詳細なクラスを設定しているためだ
+
         flash.alert = "ログイン失敗:アカウント利用停止中"
         render action: "new"
       else
         session[:staff_member_id] = staff_member.id
         session[:last_access_time] = Time.current
         # ↑ログイン時の時刻を記録。
+
+        staff_member.events.create!(type: "logged_in");
+
         flash.notice = "ログイン成功: ようこそ"
         redirect_to :staff_root
       end
@@ -47,6 +57,12 @@ class Staff::SessionsController < Staff::Base
   end
 
   def destroy
+    if current_staff_member
+      current_staff_member.events.create!(type: "logged_out");
+    end
+    # if関数で囲っているのは、ログアウトがされた状態でdestroyメソッドが来た時のため。
+    # すぐ下で「ログアウトをする」処理があるため、
+    #「記録をする」機能はまだセッションが生きている一番上に。
     session.delete(:staff_member_id)
     flash.notice = "ログアウト: またのご利用をお待ちしております"
     redirect_to :staff_root

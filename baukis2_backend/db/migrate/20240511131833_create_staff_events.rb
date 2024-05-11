@@ -2,7 +2,7 @@ class CreateStaffEvents < ActiveRecord::Migration[7.0]
   def change
     create_table :staff_events do |t|
 
-      t.references :staff_member, null: false, index: false, foeign_key: true
+      t.references :staff_member, null: false, index: false, foreign_key: true
       # foeign_keyは、ここでは「職員レコードへの外部キー」。
 
       t.string :type, null: false # イベントタイプ

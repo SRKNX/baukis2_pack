@@ -47,4 +47,5 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_11_131833) do
     t.index ["family_name_kana", "given_name_kana"], name: "index_staff_members_on_family_name_kana_and_given_name_kana"
   end
 
+  add_foreign_key "staff_events", "staff_members"
 end

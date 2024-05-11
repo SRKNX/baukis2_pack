@@ -8,9 +8,13 @@ class Admin::StaffMembersController < Admin::Base
   # ただし、適用させたくない箇所では都度skip_before_actionを使う必要がある。
 
   def index
-    @staff_members = StaffMember.order(:family_name_kana, :given_name_kana)
+    @staff_members = StaffMember.page(params[:page]).order(:family_name_kana, :given_name_kana)
     # staff_memberのレコードを全取得し、姓・名のふりがな順で並べている。
     # ここからブラウザに表示するレコードを参照するのだろう。
+
+    # @staff_members = @staff_members.page(params[:page])
+
+
   end
 
   def show

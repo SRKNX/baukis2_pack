@@ -64,7 +64,13 @@ Rails.application.routes.draw do
           # resources :staff_members, except[:show, :destroy]
 
         resource :session, only:[:create, :destroy]
-        resources :staff_members
+        # resources :staff_members
+        resources :staff_members do
+          resources :staff_events, only:[:index]
+          # ログイン/ログアウトを行ったものに限定して記録を見る設定?
+        end
+        resources :staff_events, only:[:index]
+        # 全ての記録を見る設定?
 
       end
 

@@ -5,6 +5,9 @@
     <div class="links">
         <%= link_to "新規登録", :new_admin_staff_member %>
     </div><!--  .links -->
+
+    <%= paginate @staff_members %>
+
     <table class="listing">
         <tr>
             <th>氏名</th>
@@ -25,13 +28,17 @@
 
                 <td class="boolian"><%= m.suspended? ? raw("&#x2611;") : raw("&#x2610;") %></td>
                 <td class="actions">
-                    <%= link_to "編集", [:edit, :admin, m] %>
+                    <%= link_to "編集", [:edit, :admin, m] %> |
+                    <%= link_to "Events", [:admin, m, :staff_events] %> |
                     <%= link_to "削除", [:admin, m], method: :delete,
                     data: {confirm: "本当に削除しますか？"} %>
                 </td>
             </tr>
         <% end %>
     </table><!--  .listing -->
+
+    <%= paginate @staff_members %>
+    
     <div class="links">
         <%= link_to "新規登録", :new_admin_staff_member %>
     </div><!--  .links -->
