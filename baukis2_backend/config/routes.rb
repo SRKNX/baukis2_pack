@@ -24,6 +24,9 @@ Rails.application.routes.draw do
       resource :account, except:[:new, :create, :destroy]
       # 「単数のみ」のresourcesとして、resourceがある。
       # 余談ながら、accountは本アプリでは作成/編集/削除は管理者に一任するため除外する。
+      resource :password, only:[:show, :edit, :update]
+
+
 
     end
   end
@@ -44,7 +47,8 @@ Rails.application.routes.draw do
   # end
 
   constraints host: config[:admin][:host] do
-    namespace :admin do
+    # namespace :admin do
+    namespace :admin, path: config[:admin][:path] do
       root "top#index"
         get "login" => "sessions#new", as: :login
         # post "session" => "sessions#create", as: :session
