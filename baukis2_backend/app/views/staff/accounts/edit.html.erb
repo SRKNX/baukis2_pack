@@ -3,7 +3,19 @@
 
 <div id="generic-form">
     <%= form_with model: @staff_member, url: :staff_account do |f| %>
-        <%= render "form", f: f %>
+    <%=
+       markup do |m|
+         p = StaffMemberFormPresenter.new(f, self)
+         p.with_options(required: true) do |q|
+           m << q.text_field_block(:email,"メールアドレス", size: 32)
+           m << q.password_field_block(:password,"パスワード", size: 32)
+           m << q.full_name_block(:family_name, :given_name, "氏名")
+           m << q.full_name_block(:family_name_kana, :given_name_kana, "フリガナ")
+         end
+       end
+     %>
+
+
         <div class="button">
             <%= f.submit "登録" %>
             <%= link_to "キャンセル", :staff_account %>

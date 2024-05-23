@@ -1,0 +1,17 @@
+<% p = StaffMemberFormPresenter.new(f, self) %>
+<!-- FormPresenterというプレゼンターを作り、読み込んだ。 -->
+<!-- ここで生まれた「full_name_block」メソッドでフォーム内
+「名前」の項目が簡略化。 -->
+
+<%= p.notes %>
+<%= p.text_field_block(:email,"メールアドレス", size: 32, required: true) %>
+<%= p.password_field_block(:password,"パスワード", size: 32, required: true) %>
+
+
+<%= p.full_name_block(:family_name, :given_name, "氏名", required: true) %>
+<%= p.full_name_block(:family_name_kana, :given_name_kana,
+   "フリガナ", required: true) %>
+
+<%= p.date_field_block(:start_date, "入社日", required: true) %>
+<%= p.date_field_block(:end_date, "退社日") %>
+<%= p.suspended_check_box %>

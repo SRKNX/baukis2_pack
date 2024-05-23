@@ -19,7 +19,7 @@ class Admin::StaffEventsController < Admin::Base
     #
     # @events = @events.page(params[:page])
 
-    @events = @events.page(params[:page]).include(:member).order(occurred_at: :desc)
+    @events = @events.order(occurred_at: :desc).page(params[:page]).includes(:member)
     # 上の式をまとめてさらに単純化。
 
   end
