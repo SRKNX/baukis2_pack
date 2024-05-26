@@ -1,5 +1,5 @@
 # class StaffMemberFormPresenter < FormPresenter
-class StaffMemberFormPresenter < UserFormPresenter
+class CustomerFormPresenter < UserFormPresenter
 # 似たフォームを作るときに使いまわせる「UserFormPresenter」ができたため、
 # 親も「UserFormPresenter」に変更。
 # かつての親「FormPresenter」は「UserFormPresenter」が
@@ -8,13 +8,16 @@ class StaffMemberFormPresenter < UserFormPresenter
 # 「UserFormPresenter」にないsuspended_check_boxだけが
 # ここStaffMemberFormPresenterに残ることに。
 
-  def suspended_check_box
-
-    markup(:div, class:"check-boxes") do |m|
-      m << check_box(:suspended)
-      m << label(:suspended, "アカウント停止")
+  def gender_field_block
+    markup(:div, class:"radio-button") do |m|
+      # m << label(name, label_text,
+      #   class: options[:required] ? "required" : nil)
+      m << decorated_label(:gender, "性別")
+      m << radio_button(:gender, "male")
+      m << label(:gender_male, "男性")
+      m << radio_button(:gender, "female")
+      m << label(:gender_female, "女性")
     end
-
   end
 
 

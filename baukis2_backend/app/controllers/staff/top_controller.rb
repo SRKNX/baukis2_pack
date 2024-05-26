@@ -5,10 +5,19 @@ class Staff::TopController < Staff::Base
     # base.rbでbefore_actionとして定義した処理を適用させたくない場合はこの処理を。
 
   def index
-    # raise
-    # raise Forbidden
-    # raise IpAddressRejected
-    # raise ActiveRecord::RecordNotFound
-    render action: "index"
+
+    if current_staff_member
+      render action: "dashboard"
+
+    else
+
+      # raise
+      # raise Forbidden
+      # raise IpAddressRejected
+      # raise ActiveRecord::RecordNotFound
+      render action: "index"
+
+    end
+
   end
 end

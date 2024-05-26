@@ -30,10 +30,10 @@ class FormPresenter
       # m << label(name, label_text,
       #   class: options[:required] ? "required" : nil)
       # ↑ 以蔵の表記は繰り返し出てくるため、メソッドとして使いまわせるようにする。
-      # decolated_labelという名前がついた。
-      m << decolated_label(name, label_text, options={})
+      # decorated_labelという名前がついた。
+      m << decorated_label(name, label_text, options={})
       m << text_field(name, options)
-      m << effor_messages_for(name)
+      m << error_messages_for(name)
     end
   end
 
@@ -41,10 +41,10 @@ class FormPresenter
     markup(:div, class:"input-block") do |m|
       # m << label(name, label_text,
       #   class: options[:required] ? "required" : nil)
-      m << decolated_label(name, label_text, options={})
+      m << decorated_label(name, label_text, )
       m << password_field(name, options)
       # 値無効時に、フォームにエラーが表示されるようになる。
-      m << effor_messages_for(name)
+      m << error_messages_for(name)
     end
   end
 
@@ -52,14 +52,24 @@ class FormPresenter
     markup(:div, class:"input-block") do |m|
       # m << label(name, label_text,
       #   class: options[:required] ? "required" : nil)
-      m << decolated_label(name, label_text, options={})
+      m << decorated_label(name, label_text, )
       m << date_field(name, options)
-      m << effor_messages_for(name)
+      m << error_messages_for(name)
     end
   end
 
 
-  def effor_messages_for(name)
+
+  def drop_down_list_block(name, label_text, choices, options={})
+      markup(:div, class: "input-block") do |m|
+        m << decorated_label(name, label_text, options)
+        m << form_builder.select(name, choices, {include_blank: true}, options)
+        m << error_messages_for(name)
+      end
+  end
+
+
+  def error_messages_for(name)
     # エラーメッセージは、localeファイルを作って日本語になるよう調節。
     markup do |m|
       object.errors.full_messages_for(name).each do |message|
@@ -69,15 +79,12 @@ class FormPresenter
       end
     end
 
-
   end
-
-
 
 
   private
 
-  def decolated_label(name, label_text, options={})
+  def decorated_label(name, label_text, options={})
     label(name, label_text, class: options[:required] ? "required" : nil)
   end
 
